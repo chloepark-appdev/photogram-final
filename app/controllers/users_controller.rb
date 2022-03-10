@@ -42,12 +42,12 @@ class UsersController < ApplicationController
   end
 
   def update
-    the_id = params.fetch("path_id")
-    the_user = User.where({ :id => the_id }).at(0)
 
-    the_user.comments_count = params.fetch("query_comments_count")
+    the_user = @current_user
+
+    # the_user.comments_count = params.fetch("query_comments_count")
     the_user.email = params.fetch("query_email")
-    the_user.likes_count = params.fetch("query_likes_count")
+    # the_user.likes_count = params.fetch("query_likes_count")
     the_user.password_digest = params.fetch("query_password_digest")
     the_user.private = params.fetch("query_private", false)
     the_user.username = params.fetch("query_username")
@@ -96,6 +96,8 @@ class UsersController < ApplicationController
     redirect_to("/", { :notice => "Signed out successfully." })
   end
 
-
+  def edit_profile_form
+    render({ :template => "users/edit_profile.html.erb" })
+  end
 
 end

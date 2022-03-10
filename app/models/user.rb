@@ -6,7 +6,6 @@
 #  comments_count  :integer
 #  email           :string
 #  likes_count     :integer
-#  password        :string
 #  password_digest :string
 #  private         :boolean
 #  username        :string

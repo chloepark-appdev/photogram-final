@@ -89,7 +89,7 @@ Rails.application.routes.draw do
   
   # UPDATE
   
-  post("/modify_user/:path_id", { :controller => "users", :action => "update" })
+  post("/modify_user", { :controller => "users", :action => "update" })
   
   # DELETE
   get("/delete_user/:path_id", { :controller => "users", :action => "destroy" })
@@ -111,6 +111,8 @@ Rails.application.routes.draw do
   # SIGN OUT        
   get("/user_sign_out", { :controller => "users", :action => "destroy_cookies" })
              
+  get("/edit_user_profile", { :controller => "users", :action => "edit_profile_form" })
+
   #------------------------------
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
