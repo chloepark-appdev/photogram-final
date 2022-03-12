@@ -2,7 +2,7 @@
 <div>
   <div>
     <h1>
-      User #<%= @the_user.id %> details
+      <%= @the_user.username %>
     </h1>
 
     <div>
@@ -21,67 +21,55 @@
 
     <dl>
       <dt>
-        Comments count
-      </dt>
-      <dd>
-        <%= @the_user.comments_count %>
-      </dd>
-
-      <dt>
-        Email
-      </dt>
-      <dd>
-        <%= @the_user.email %>
-      </dd>
-
-      <dt>
-        Likes count
-      </dt>
-      <dd>
-        <%= @the_user.likes_count %>
-      </dd>
-
-      <dt>
-        Password digest
-      </dt>
-      <dd>
-        <%= @the_user.password_digest %>
-      </dd>
-
-      <dt>
         Private
       </dt>
       <dd>
         <%= @the_user.private %>
       </dd>
-
       <dt>
-        Username
+        Followers
       </dt>
       <dd>
-        <%= @the_user.username %>
+        0
       </dd>
-
       <dt>
-        Password
+        Following
       </dt>
       <dd>
-        <%= @the_user.password %>
+        0
       </dd>
 
-      <dt>
-        Created at
-      </dt>
-      <dd>
-        <%= time_ago_in_words(@the_user.created_at) %> ago
-      </dd>
+      <% if @current_user.id == @the_user.id %>
+        <dt>Edit user</dt>
+        <dd>
+          <form action="/modify_user" method="post">
+            <label for="browser_username">Username</label>
+            <input id="browser_username" type="text" name="query_username" placeholder="Enter a username..."
+              value="<%= @the_user.username %>">
 
-      <dt>
-        Updated at
-      </dt>
-      <dd>
-        <%= time_ago_in_words(@the_user.updated_at) %> ago
-      </dd>
+            <label for="browser_private">Private?</label>
+            <input id="browser_private" type="checkbox" name="query_private" >
+
+            <button>Update user</button>
+          </form>
+        </dd>
+      <% end %>
+
+      <li>
+        <a href="/users/<%= @the_user.username %>">Profile</a>
+      </li>      
+     <li>
+        <a href="/users/<%= @the_user.username %>/liked_photos">Liked photos</a>
+      </li>     
+      <li>
+        <a href="/users/<%= @the_user.username %>/feed">Feed</a>
+      </li>   
+      <li>
+        <a href="/users/<%= @the_user.username %>/discover">Discover</a>
+      </li>    
+
+
+
     </dl>
   </div>
 </div>
@@ -89,74 +77,28 @@
 <hr>
 
 
-<div>
-  <div>
-    <h2>
-      Edit user
-    </h2>
+<h2>Own photos (<%= @the_user.photos.count %>)</h2>
 
-    <form action="/modify_user/<%= @the_user.id %>"  method="post" >
-      <div>
-        <label for="comments_count_box">
-          Comments count
-        </label>
+<table border="1">
+  <tr>
+    <th>Image</th>
+    <th>Owner</th>
+    <th>Caption</th>
+    <th>Posted</th>
+    <th>Likes</th>
+    <th></th>
+  <tr>
 
-        <input type="text" id="comments_count_box" name="query_comments_count" value="<%= @the_user.comments_count %>">
-      </div>
+  <% @the_user.photos.each do |the_photo| %>
+    <tr>
+      <td><img src="<%= the_photo.image %>"></td>
+      <td><%= the_photo.owner.username %></td>
+      <%#=the_photo.poster.username %>
+      <td><%= the_photo.caption %></td>
+      <td><%= time_ago_in_words(the_photo.created_at) %> ago</td>
+      <td><%= the_photo.likes.count %></td>
+      <td><a href="/users/<%= @the_user.username %>">Show details</td>
+    </tr>
+  <% end %>
+</table>
 
-      <div>
-        <label for="email_box">
-          Email
-        </label>
-
-        <input type="text" id="email_box" name="query_email" value="<%= @the_user.email %>">
-      </div>
-
-      <div>
-        <label for="likes_count_box">
-          Likes count
-        </label>
-
-        <input type="text" id="likes_count_box" name="query_likes_count" value="<%= @the_user.likes_count %>">
-      </div>
-
-      <div>
-        <label for="password_digest_box">
-          Password digest
-        </label>
-
-        <input type="text" id="password_digest_box" name="query_password_digest" value="<%= @the_user.password_digest %>">
-      </div>
-
-      <div>
-        <input type="checkbox" id="private_box" name="query_private" value="1" <%= "checked" if @the_user.private %>>
-
-        <label for="private_box">
-            Private
-        </label>
-      </div>
-
-      <div>
-        <label for="username_box">
-          Username
-        </label>
-
-        <input type="text" id="username_box" name="query_username" value="<%= @the_user.username %>">
-      </div>
-
-      <div>
-        <label for="password_box">
-          Password
-        </label>
-
-        <input type="text" id="password_box" name="query_password" value="<%= @the_user.password %>">
-      </div>
-
-      <button>
-        Update user
-      </button>
-    </form>
-  </div>
-</div>
-
-<hr>

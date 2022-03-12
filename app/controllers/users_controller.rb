@@ -8,9 +8,9 @@ class UsersController < ApplicationController
   end
 
   def show
-    the_id = params.fetch("path_id")
+    username = params.fetch("username")
 
-    matching_users = User.where({ :id => the_id })
+    matching_users = User.where({ :username => username })
 
     @the_user = matching_users.at(0)
 
@@ -42,22 +42,22 @@ class UsersController < ApplicationController
   end
 
   def update
-
     the_user = @current_user
 
-    # the_user.comments_count = params.fetch("query_comments_count")
     the_user.email = params.fetch("query_email")
-    # the_user.likes_count = params.fetch("query_likes_count")
-    the_user.password_digest = params.fetch("query_password_digest")
     the_user.private = params.fetch("query_private", false)
     the_user.username = params.fetch("query_username")
-    the_user.password = params.fetch("query_password")
+
+    if params.fetch("query_password").length > 0 && params.fetch("query_password_digest").length > 0
+      the_user.password = params.fetch("query_password")
+      the_user.password_digest = params.fetch("query_password_digest")
+    end
 
     if the_user.valid?
       the_user.save
-      redirect_to("/users/#{the_user.id}", { :notice => "User updated successfully."} )
+      redirect_to("/users/#{the_user.username}", { :notice => "User updated successfully."} )
     else
-      redirect_to("/users/#{the_user.id}", { :alert => "User failed to update successfully." })
+      redirect_to("/users/#{the_user.username}", { :alert => "User failed to update successfully." })
     end
   end
 
@@ -97,7 +97,10 @@ class UsersController < ApplicationController
   end
 
   def edit_profile_form
-    render({ :template => "users/edit_profile.html.erb" })
+    if @current_user
+     render({ :template => "users/edit_profile.html.erb" })
+    else
+      redirect_to("/user_sign_in", { :alert => "You have to sign in first." })
   end
-
+  end
 end

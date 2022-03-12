@@ -14,6 +14,14 @@
     <%= stylesheet_link_tag    'application', media: 'all' %>
   </head>
 
+      <li>
+        <a href="/users">All users</a>
+      </li>      
+     <li>
+        <a href="/photos">All public photos</a>
+      </li>      
+
+
   <body>
     <% if @current_user == nil %>
       <li>
